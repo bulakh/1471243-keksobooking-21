@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Булах](https://up.htmlacademy.ru/javascript/21/user/1471243).
-* Наставник: `Неизвестно`.
+* Наставник: [Павел Белик](https://htmlacademy.ru/profile/id84572).
 
 ---
 
