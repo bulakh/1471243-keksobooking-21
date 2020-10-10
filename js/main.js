@@ -144,53 +144,57 @@ const TipCoordinates = {
   y: parseInt(mapPinMain.style.top, 10)
 };
 
-const disabledEachElement = function (elements) {
+const disableEachElement = function (elements) {
   for (let elem of elements) {
     elem.setAttribute(`disabled`, `disabled`);
   }
 };
 
-const getDisabled = function () {
-  disabledEachElement(adFormFieldsets);
-  disabledEachElement(mapFiltres);
+const disableAllElements = function () {
+  disableEachElement(adFormFieldsets);
+  disableEachElement(mapFiltres);
 };
 
-const getStartCoordinate = function () {
+const setStartCoordinates = function () {
   adFormAddress.value = START_COORDINATES.X + `, ` + START_COORDINATES.Y;
 };
 
 
-getStartCoordinate();
+setStartCoordinates();
 
-getDisabled();
+disableAllElements();
 
 // Активация страницы
 
-const removeEachElementAttr = function (elements) {
+const removeDisabledFromCollection = function (elements) {
   for (let elem of elements) {
     elem.removeAttribute(`disabled`, `disabled`);
   }
 };
 
-const getActivePage = function () {
+const activatePage = function () {
   userMap.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
-  removeEachElementAttr(adFormFieldsets);
-  removeEachElementAttr(mapFiltres);
+  removeDisabledFromCollection(adFormFieldsets);
+  removeDisabledFromCollection(mapFiltres);
   adFormAddress.value = (TipCoordinates.x + PIN_SIZE.WIDTH / 2) + `, ` + (TipCoordinates.y + PIN_SIZE.HEIGHT / 2);
 };
 
-mapPinMain.addEventListener(`keydown`, function (evt) {
+const onPinEnterPress = function (evt) {
   if (evt.key === `Enter`) {
-    getActivePage();
+    activatePage();
   }
-});
+};
 
-mapPinMain.addEventListener(`mousedown`, function (evt) {
+const onPinMouseClick = function (evt) {
   if (evt.which === 1) {
-    getActivePage();
+    activatePage();
   }
-});
+};
+
+mapPinMain.addEventListener(`keydown`, onPinEnterPress);
+
+mapPinMain.addEventListener(`mousedown`, onPinMouseClick);
 
 // Валидация
 
@@ -198,7 +202,7 @@ const roomNumber = adForm.querySelector(`#room_number`);
 const capacityNumber = adForm.querySelector(`#capacity`);
 
 
-const getCapacityGuests = function () {
+const joinGuestsToRooms = function () {
   if (roomNumber.value === `1`) {
     capacityNumber.value = 1;
     capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
@@ -222,7 +226,5 @@ const getCapacityGuests = function () {
   }
 };
 
-roomNumber.addEventListener(`change`, function () {
-  getCapacityGuests();
-});
+roomNumber.addEventListener(`change`, joinGuestsToRooms);
 
