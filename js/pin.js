@@ -2,7 +2,8 @@
 
 (function () {
 
-  const ADVERT_NUMBER = window.data.ADVERT_NUMBER;
+  const load = window.backend.load;
+  const errorHandler = window.data.errorHandler;
 
   const PIN_SIZE = {
     WIDTH: 50,
@@ -13,7 +14,7 @@
 
   const pinTemplate = document.querySelector(`#pin`)
     .content
-    .querySelector(`map__pin`);
+    .querySelector(`.map__pin`);
 
   const mapContainer = userMap.querySelector(`.map__pins`);
 
@@ -30,18 +31,19 @@
     return pinElement;
   };
 
-  const createPins = function (adverts) {
+  const successHandler = function (res) {
+
     const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < adverts.length; i++) {
-      fragment.appendChild(createPin[i]);
+    for (let i = 0; i < res.length; i++) {
+      fragment.appendChild(createPin(res[i]));
     }
 
     mapContainer.appendChild(fragment);
   };
 
+  load(successHandler, errorHandler);
 
-  createPins(ADVERT_NUMBER);
 
   window.pin = {
     PIN_SIZE,
