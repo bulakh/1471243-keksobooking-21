@@ -1,7 +1,5 @@
 'use strict';
 
-// main.js
-
 (function () {
 
   const getRandomArrElement = function (arr) {

@@ -2,9 +2,6 @@
 
 (function () {
 
-  const load = window.backend.load;
-  const errorHandler = window.data.errorHandler;
-
   const PIN_SIZE = {
     WIDTH: 50,
     HEIGHT: 70
@@ -31,22 +28,21 @@
     return pinElement;
   };
 
-  const successHandler = function (res) {
+  const successHandler = function (orders) {
 
     const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < res.length; i++) {
-      fragment.appendChild(createPin(res[i]));
+    for (let i = 0; i < orders.length; i++) {
+      fragment.appendChild(createPin(orders[i]));
     }
 
     mapContainer.appendChild(fragment);
   };
 
-  load(successHandler, errorHandler);
-
 
   window.pin = {
     PIN_SIZE,
-    userMap
+    userMap,
+    successHandler
   };
 })();

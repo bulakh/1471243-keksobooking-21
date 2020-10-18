@@ -5,7 +5,6 @@
   const getRandomArrLength = window.main.getRandomArrLength;
   const getRandomArrElement = window.main.getRandomArrElement;
   const getRandomNumber = window.main.getRandomNumber;
-  const load = window.backend.load;
 
   const MAP_SIZE = {
     MAP_WIDTH: 1200,
@@ -71,23 +70,10 @@
     // Добавление карточек объявлений
   };
 
-  const errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
-  };
-
-  load(successHandler, errorHandler);
 
   window.data = {
     ADVERT_NUMBER,
     getAdvert,
-    errorHandler
+    successHandler
   };
 })();

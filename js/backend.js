@@ -33,6 +33,6 @@
 
       xhr.open(`GET`, URL);
       xhr.send();
-    }
+    },
   };
 })();
