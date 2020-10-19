@@ -66,7 +66,14 @@
 
   getAdverts(ADVERT_NUMBER);
 
+  const successHandler = function () {
+    // Добавление карточек объявлений
+  };
+
+
   window.data = {
-    ADVERT_NUMBER
+    ADVERT_NUMBER,
+    getAdvert,
+    successHandler
   };
 })();
