@@ -11,9 +11,11 @@
 
   const adForm = document.querySelector(`.ad-form`);
   const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
-  const mapFiltres = document.querySelectorAll(`.map__filter`);
+  const mapFiltresForm = document.querySelector(`.map__filters`);
+  const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
   const adFormAddress = adForm.querySelector(`#address`);
   const mapPinMain = document.querySelector(`.map__pin--main`);
+  const showPins = window.pin.showPins;
 
   const TipCoordinates = {
     x: parseInt(mapPinMain.style.left, 10),
@@ -45,12 +47,19 @@
     }
   };
 
+  const showFormWithLoad = function (orders) {
+    if (orders.length) {
+      removeDisabledFromCollection(mapFiltres);
+      mapFiltresForm.classList.remove(`hidden`);
+    }
+  };
+
   const activatePage = function () {
     userMap.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
     removeDisabledFromCollection(adFormFieldsets);
-    removeDisabledFromCollection(mapFiltres);
     adFormAddress.value = (TipCoordinates.x + PIN_SIZE.WIDTH / 2) + `, ` + (TipCoordinates.y + PIN_SIZE.HEIGHT / 2);
+    showPins();
   };
 
   const onPinEnterPress = function (evt) {
@@ -66,6 +75,7 @@
   mapPinMain.addEventListener(`mousedown`, onPinMouseClick);
 
   window.activation = {
-    adForm
+    adForm,
+    showFormWithLoad
   };
 })();
