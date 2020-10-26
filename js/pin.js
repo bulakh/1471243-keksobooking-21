@@ -1,11 +1,14 @@
 'use strict';
 
 (function () {
+  const housingType = window.filter.housingType;
+  const filterOrders = window.filter.filterOrders;
 
   const PIN_SIZE = {
     WIDTH: 50,
     HEIGHT: 70
   };
+  const MAX_PINS = 5;
 
   const userMap = document.querySelector(`.map`);
 
@@ -28,21 +31,51 @@
     return pinElement;
   };
 
-  const successHandler = function (orders) {
+  let orders = [];
 
+  const renderPins = function (currentOrders) {
     const fragment = document.createDocumentFragment();
+    let maxCountPins = MAX_PINS < currentOrders.length ? MAX_PINS : currentOrders.length;
 
-    for (let i = 0; i < orders.length; i++) {
-      fragment.appendChild(createPin(orders[i]));
+    for (let i = 0; i < maxCountPins; i++) {
+      fragment.appendChild(createPin(currentOrders[i]));
     }
-
     mapContainer.appendChild(fragment);
   };
 
+  const changeHousingTypeHandler = function () {
+    const filteredOrders = filterOrders(orders);
+    removePins();
+    renderPins(filteredOrders);
+  };
+
+  const removePins = function () {
+    const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    const pin = [...pins];
+    for (let i = 0; i < pin.length; i++) {
+      pin[i].classList.add(`hidden`);
+    }
+  };
+
+  const showPins = function () {
+    const pins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    const pin = [...pins];
+    for (let i = 0; i < pin.length; i++) {
+      pin[i].classList.remove(`hidden`);
+    }
+  };
+
+  const successHandler = function (data) {
+    orders = data;
+    renderPins(orders);
+    removePins();
+    housingType.addEventListener(`change`, changeHousingTypeHandler);
+  };
 
   window.pin = {
     PIN_SIZE,
     userMap,
-    successHandler
+    successHandler,
+    showPins
   };
 })();
