@@ -19,7 +19,7 @@
 
   load(function (orders) {
     window.pin.successHandler(orders);
-    window.data.successHandler(orders);
+    window.card.successHandler(orders);
     showFormWithLoad(orders);
   }, errorHandler);
 
