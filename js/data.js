@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   const getRandomArrLength = window.main.getRandomArrLength;
   const getRandomArrElement = window.main.getRandomArrElement;
   const getRandomNumber = window.main.getRandomNumber;
@@ -26,7 +25,6 @@
   const CHECK_TIME = [`12:00`, `13:00`, `14:00`];
   const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
   const PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
-
 
   const getAdvert = function (adAmount) {
     const locationX = getRandomNumber(0, MAP_SIZE.MAP_WIDTH);
@@ -66,14 +64,4 @@
 
   getAdverts(ADVERT_NUMBER);
 
-  const successHandler = function () {
-    // Добавление карточек объявлений
-  };
-
-
-  window.data = {
-    ADVERT_NUMBER,
-    getAdvert,
-    successHandler
-  };
 })();

@@ -34,13 +34,13 @@
   let orders = [];
 
   const renderPins = function (currentOrders) {
-    const fragment = document.createDocumentFragment();
+    const pinFragment = document.createDocumentFragment();
     let maxCountPins = MAX_PINS < currentOrders.length ? MAX_PINS : currentOrders.length;
 
     for (let i = 0; i < maxCountPins; i++) {
-      fragment.appendChild(createPin(currentOrders[i]));
+      pinFragment.appendChild(createPin(currentOrders[i]));
     }
-    mapContainer.appendChild(fragment);
+    mapContainer.appendChild(pinFragment);
   };
 
   const changeHousingTypeHandler = function () {
@@ -75,6 +75,7 @@
   window.pin = {
     PIN_SIZE,
     userMap,
+    mapContainer,
     successHandler,
     showPins
   };
