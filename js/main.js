@@ -37,12 +37,20 @@
     }
   };
 
+  const onEscPress = function (evt, action) {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      action();
+    }
+  };
+
   window.main = {
     getRandomArrElement,
     getRandomNumber,
     getRandomArrLength,
     onElemEnterPress,
-    onElemMouseClick
+    onElemMouseClick,
+    onEscPress
   };
 })();
 

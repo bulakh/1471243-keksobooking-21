@@ -3,6 +3,7 @@
 (function () {
   const userMap = window.pin.userMap;
   const PIN_SIZE = window.pin.PIN_SIZE;
+  const load = window.backend.load;
 
   const START_COORDINATES = {
     X: 648,
@@ -15,7 +16,6 @@
   const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
   const adFormAddress = adForm.querySelector(`#address`);
   const mapPinMain = document.querySelector(`.map__pin--main`);
-  const showPins = window.pin.showPins;
 
   const TipCoordinates = {
     x: parseInt(mapPinMain.style.left, 10),
@@ -47,21 +47,6 @@
     }
   };
 
-  const showFormWithLoad = function (orders) {
-    if (orders.length) {
-      removeDisabledFromCollection(mapFiltres);
-      mapFiltresForm.classList.remove(`hidden`);
-    }
-  };
-
-  const activatePage = function () {
-    userMap.classList.remove(`map--faded`);
-    adForm.classList.remove(`ad-form--disabled`);
-    removeDisabledFromCollection(adFormFieldsets);
-    adFormAddress.value = (TipCoordinates.x + PIN_SIZE.WIDTH / 2) + `, ` + (TipCoordinates.y + PIN_SIZE.HEIGHT / 2);
-    showPins();
-  };
-
   const onPinEnterPress = function (evt) {
     window.main.onElemEnterPress(evt, activatePage);
   };
@@ -74,8 +59,39 @@
 
   mapPinMain.addEventListener(`mousedown`, onPinMouseClick);
 
+  const showFormWithLoad = function (data) {
+    if (data.length) {
+      removeDisabledFromCollection(mapFiltres);
+      mapFiltresForm.classList.remove(`hidden`);
+    }
+  };
+
+  const errorHandler = function (errorMessage) {
+    const node = document.createElement(`div`);
+    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white`;
+    node.style.position = `absolute`;
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = `30px`;
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+  const activatePage = function () {
+    userMap.classList.remove(`map--faded`);
+    adForm.classList.remove(`ad-form--disabled`);
+    removeDisabledFromCollection(adFormFieldsets);
+    adFormAddress.value = (TipCoordinates.x + PIN_SIZE.WIDTH / 2) + `, ` + (TipCoordinates.y + PIN_SIZE.HEIGHT / 2);
+    load(function (orders) {
+      window.pin.successHandler(orders);
+      showFormWithLoad(orders);
+    }, errorHandler);
+  };
+
   window.activation = {
     adForm,
-    showFormWithLoad
+    showFormWithLoad,
+    activatePage
   };
 })();
