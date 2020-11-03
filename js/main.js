@@ -2,6 +2,9 @@
 
 (function () {
 
+  const ENTER = `Enter`;
+  const ESC = `Escape`;
+
   const getRandomArrElement = function (arr) {
     return arr[Math.floor(Math.random() * arr.length)];
   };
@@ -26,7 +29,7 @@
   };
 
   const onElemEnterPress = function (evt, action) {
-    if (evt.key === `Enter`) {
+    if (evt.key === ENTER) {
       action();
     }
   };
@@ -38,7 +41,7 @@
   };
 
   const onEscPress = function (evt, action) {
-    if (evt.key === `Escape`) {
+    if (evt.key === ESC) {
       evt.preventDefault();
       action();
     }

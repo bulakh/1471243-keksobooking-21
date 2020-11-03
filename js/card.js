@@ -116,10 +116,18 @@
     }
 
     const cardFeatures = cardElement.querySelector(`.popup__features`);
-    makeFeatures(advert.offer.features, cardFeatures);
+    if (advert.offer.features.length) {
+      makeFeatures(advert.offer.features, cardFeatures);
+    } else {
+      cardFeatures.remove();
+    }
 
     const cardPhotos = cardElement.querySelector(`.popup__photos`);
-    makePhotos(advert.offer.photos, cardPhotos);
+    if (advert.offer.photos.length) {
+      makePhotos(advert.offer.photos, cardPhotos);
+    } else {
+      cardPhotos.remove();
+    }
 
     const cardDescription = cardElement.querySelector(`.popup__description`);
     if (advert.offer.description) {
@@ -171,9 +179,11 @@
     }
   };
 
+
   window.card = {
     createCard,
     deactivatePin,
-    removeCards
+    removeCards,
+    HouseType
   };
 })();

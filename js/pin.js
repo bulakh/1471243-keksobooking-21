@@ -30,20 +30,29 @@
     const pinX = advert.location.x - PIN_SIZE.WIDTH / 2;
     const pinY = advert.location.y - PIN_SIZE.HEIGHT;
     pinElement.style = `left: ` + pinX + `px; top: ` + pinY + `px;`;
-
-    const onPinClickShowCard = function () {
-      deactivatePin();
-      pinElement.classList.add(`map__pin--active`);
-      removeCards();
-      createCard(advert);
-    };
-
-    pinElement.addEventListener(`click`, onPinClickShowCard);
+    pinElement.dataset.id = advert.offer.address;
 
     return pinElement;
   };
 
   let orders = [];
+
+  const onPinClickHandler = function (evt) {
+    let pin = evt.target.closest(`button`);
+    deactivatePin();
+    pin.classList.add(`map__pin--active`);
+    removeCards();
+    let orderAddress = pin.dataset.id;
+    createCard(orders.find(function (el) {
+      if (orderAddress === el.offer.address) {
+        return true;
+      }
+      return false;
+    }));
+  };
+
+  mapContainer.addEventListener(`click`, onPinClickHandler);
+
 
   const renderPins = function (currentOrders) {
     const pinFragment = document.createDocumentFragment();
@@ -65,6 +74,7 @@
 
   const changeHousingTypeHandler = function () {
     const filteredOrders = filterOrders(orders);
+    removeCards();
     removePins();
     renderPins(filteredOrders);
   };

@@ -3,6 +3,13 @@
 (function () {
 
   const adForm = window.activation.adForm;
+  const HouseType = window.card.HouseType;
+  const MinHousePrice = {
+    BUNGALOW: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
+  };
 
   const roomNumber = adForm.querySelector(`#room_number`);
   const capacityNumber = adForm.querySelector(`#capacity`);
@@ -39,18 +46,18 @@
   roomNumber.addEventListener(`change`, joinGuestsToRooms);
 
   const changeTypeHouse = function () {
-    if (typeHouse.value === `bungalow`) {
-      priceNumber.min = 0;
-      priceNumber.placeholder = 0;
-    } else if (typeHouse.value === `flat`) {
-      priceNumber.min = 1000;
-      priceNumber.placeholder = 1000;
-    } else if (typeHouse.value === `house`) {
-      priceNumber.min = 5000;
-      priceNumber.placeholder = 5000;
-    } else if (typeHouse.value === `palace`) {
-      priceNumber.min = 10000;
-      priceNumber.placeholder = 10000;
+    if (typeHouse.value === HouseType.BUNGALOW) {
+      priceNumber.min = MinHousePrice.BUNGALOW;
+      priceNumber.placeholder = MinHousePrice.BUNGALOW;
+    } else if (typeHouse.value === HouseType.FLAT) {
+      priceNumber.min = MinHousePrice.FLAT;
+      priceNumber.placeholder = MinHousePrice.FLAT;
+    } else if (typeHouse.value === HouseType.HOUSE) {
+      priceNumber.min = MinHousePrice.HOUSE;
+      priceNumber.placeholder = MinHousePrice.HOUSE;
+    } else if (typeHouse.value === HouseType.PALACE) {
+      priceNumber.min = MinHousePrice.PALACE;
+      priceNumber.placeholder = MinHousePrice.PALACE;
     }
   };
 
