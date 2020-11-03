@@ -4,10 +4,26 @@
   const userMap = window.pin.userMap;
   const PIN_SIZE = window.pin.PIN_SIZE;
   const load = window.backend.load;
+  const mainPin = document.querySelector(`.map__pin--main`);
 
   const START_COORDINATES = {
     X: 648,
     Y: 453
+  };
+
+  const TipCoordinates = {
+    X: parseInt(mainPin.style.left, 10),
+    Y: parseInt(mainPin.style.top, 10)
+  };
+
+  const HALF_PIN_SIZE = {
+    X: PIN_SIZE.WIDTH / 2,
+    Y: PIN_SIZE.HEIGHT / 2
+  };
+
+  const DefaultCoordinates = {
+    X: TipCoordinates.X + HALF_PIN_SIZE.X,
+    Y: TipCoordinates.Y + HALF_PIN_SIZE.Y
   };
 
   const adForm = document.querySelector(`.ad-form`);
@@ -15,12 +31,12 @@
   const mapFiltresForm = document.querySelector(`.map__filters`);
   const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
   const adFormAddress = adForm.querySelector(`#address`);
-  const mapPinMain = document.querySelector(`.map__pin--main`);
 
-  const TipCoordinates = {
-    x: parseInt(mapPinMain.style.left, 10),
-    y: parseInt(mapPinMain.style.top, 10)
+  const setAddress = function (x, y) {
+    adFormAddress.value = x + `, ` + y;
   };
+
+  setAddress(START_COORDINATES.X, START_COORDINATES.Y);
 
   const disableEachElement = function (elements) {
     for (let elem of elements) {
@@ -32,12 +48,6 @@
     disableEachElement(adFormFieldsets);
     disableEachElement(mapFiltres);
   };
-
-  const setStartCoordinates = function () {
-    adFormAddress.value = START_COORDINATES.X + `, ` + START_COORDINATES.Y;
-  };
-
-  setStartCoordinates();
 
   disableAllElements();
 
@@ -55,9 +65,9 @@
     window.main.onElemMouseClick(evt, activatePage);
   };
 
-  mapPinMain.addEventListener(`keydown`, onPinEnterPress);
+  mainPin.addEventListener(`keydown`, onPinEnterPress);
 
-  mapPinMain.addEventListener(`mousedown`, onPinMouseClick);
+  mainPin.addEventListener(`mousedown`, onPinMouseClick);
 
   const showFormWithLoad = function (data) {
     if (data.length) {
@@ -82,16 +92,18 @@
     userMap.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
     removeDisabledFromCollection(adFormFieldsets);
-    adFormAddress.value = (TipCoordinates.x + PIN_SIZE.WIDTH / 2) + `, ` + (TipCoordinates.y + PIN_SIZE.HEIGHT / 2);
+    setAddress(DefaultCoordinates.X, DefaultCoordinates.Y);
+    // console.log(mainPin.style.left);
     load(function (orders) {
       window.pin.successHandler(orders);
       showFormWithLoad(orders);
     }, errorHandler);
   };
 
-  window.activation = {
+  window.map = {
     adForm,
-    showFormWithLoad,
-    activatePage
+    mainPin,
+    HALF_PIN_SIZE,
+    setAddress
   };
 })();

@@ -4,6 +4,7 @@
 
   const ENTER = `Enter`;
   const ESC = `Escape`;
+  const LEFT_BUTTON_MOUSE = 1;
 
   const getRandomArrElement = function (arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -35,7 +36,7 @@
   };
 
   const onElemMouseClick = function (evt, action) {
-    if (evt.which === 1) {
+    if (evt.which === LEFT_BUTTON_MOUSE) {
       action();
     }
   };

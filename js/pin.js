@@ -38,7 +38,14 @@
   let orders = [];
 
   const onPinClickHandler = function (evt) {
-    let pin = evt.target.closest(`button`);
+    let pin;
+    if (evt.target.matches(`.map__pin:not(.map__pin--active):not(.map__pin--main)`)) {
+      pin = evt.target;
+    } else if (evt.target.parentElement.matches(`.map__pin:not(.map__pin--active):not(.map__pin--main)`)) {
+      pin = evt.target.parentElement;
+    } else {
+      return;
+    }
     deactivatePin();
     pin.classList.add(`map__pin--active`);
     removeCards();
@@ -87,11 +94,7 @@
 
   window.pin = {
     PIN_SIZE,
-    pinTemplate,
     userMap,
-    mapContainer,
-    successHandler,
-    createPin,
-    renderPins
+    successHandler
   };
 })();

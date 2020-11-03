@@ -2,7 +2,7 @@
 
 (function () {
 
-  const adForm = window.activation.adForm;
+  const adForm = window.map.adForm;
   const HouseType = window.card.HouseType;
   const MinHousePrice = {
     BUNGALOW: 0,
