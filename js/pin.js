@@ -86,7 +86,7 @@
     renderPins(filteredOrders);
   };
 
-  const successHandler = function (data) {
+  const successLoadHandler = function (data) {
     orders = data;
     renderPins(orders);
     housingType.addEventListener(`change`, changeHousingTypeHandler);
@@ -95,6 +95,7 @@
   window.pin = {
     PIN_SIZE,
     userMap,
-    successHandler
+    successLoadHandler,
+    removePins
   };
 })();

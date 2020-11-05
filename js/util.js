@@ -48,7 +48,7 @@
     }
   };
 
-  window.main = {
+  window.util = {
     getRandomArrElement,
     getRandomNumber,
     getRandomArrLength,

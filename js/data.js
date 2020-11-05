@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  const getRandomArrLength = window.main.getRandomArrLength;
-  const getRandomArrElement = window.main.getRandomArrElement;
-  const getRandomNumber = window.main.getRandomNumber;
+  const getRandomArrLength = window.util.getRandomArrLength;
+  const getRandomArrElement = window.util.getRandomArrElement;
+  const getRandomNumber = window.util.getRandomNumber;
 
   const MAP_SIZE = {
     MAP_WIDTH: 1200,

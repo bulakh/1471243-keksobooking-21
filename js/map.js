@@ -4,11 +4,16 @@
   const userMap = window.pin.userMap;
   const PIN_SIZE = window.pin.PIN_SIZE;
   const load = window.backend.load;
+  const save = window.backend.save;
+  const removePins = window.pin.removePins;
+  const showErrorSend = window.modals.showErrorSend;
+  const errorLoadHandler = window.modals.errorLoadHandler;
+  const showSuccessSend = window.modals.showSuccessSend;
   const mainPin = document.querySelector(`.map__pin--main`);
 
   const START_COORDINATES = {
-    X: 648,
-    Y: 453
+    X: 570,
+    Y: 375
   };
 
   const TipCoordinates = {
@@ -36,7 +41,10 @@
     adFormAddress.value = x + `, ` + y;
   };
 
-  setAddress(START_COORDINATES.X, START_COORDINATES.Y);
+  const setStartCoordsMainPin = function () {
+    mainPin.style.left = START_COORDINATES.X + `px`;
+    mainPin.style.top = START_COORDINATES.Y + `px`;
+  };
 
   const disableEachElement = function (elements) {
     for (let elem of elements) {
@@ -49,8 +57,6 @@
     disableEachElement(mapFiltres);
   };
 
-  disableAllElements();
-
   const removeDisabledFromCollection = function (elements) {
     for (let elem of elements) {
       elem.removeAttribute(`disabled`, `disabled`);
@@ -58,16 +64,12 @@
   };
 
   const onPinEnterPress = function (evt) {
-    window.main.onElemEnterPress(evt, activatePage);
+    window.util.onElemEnterPress(evt, activatePage);
   };
 
   const onPinMouseClick = function (evt) {
-    window.main.onElemMouseClick(evt, activatePage);
+    window.util.onElemMouseClick(evt, activatePage);
   };
-
-  mainPin.addEventListener(`keydown`, onPinEnterPress);
-
-  mainPin.addEventListener(`mousedown`, onPinMouseClick);
 
   const showFormWithLoad = function (data) {
     if (data.length) {
@@ -76,28 +78,47 @@
     }
   };
 
-  const errorHandler = function (errorMessage) {
-    const node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white`;
-    node.style.position = `absolute`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
+  const successSendHandler = function () {
+    showSuccessSend();
+    deactivatePage();
   };
+
+  const errorSendHandler = function () {
+    showErrorSend();
+    deactivatePage();
+  };
+
+  const submitHandler = function (evt) {
+    save(new FormData(adForm), successSendHandler, errorSendHandler);
+    evt.preventDefault();
+  };
+
+  const deactivatePage = function () {
+    userMap.classList.add(`map--faded`);
+    adForm.classList.add(`ad-form--disabled`);
+    setStartCoordsMainPin();
+    removePins();
+    disableAllElements();
+    adForm.reset();
+    mainPin.addEventListener(`keydown`, onPinEnterPress);
+    mainPin.addEventListener(`mousedown`, onPinMouseClick);
+    adForm.removeEventListener(`submit`, submitHandler);
+  };
+
+  deactivatePage();
 
   const activatePage = function () {
     userMap.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
     removeDisabledFromCollection(adFormFieldsets);
     setAddress(DefaultCoordinates.X, DefaultCoordinates.Y);
-    // console.log(mainPin.style.left);
     load(function (orders) {
-      window.pin.successHandler(orders);
+      window.pin.successLoadHandler(orders);
       showFormWithLoad(orders);
-    }, errorHandler);
+    }, errorLoadHandler);
+    mainPin.removeEventListener(`keydown`, onPinEnterPress);
+    mainPin.removeEventListener(`mousedown`, onPinMouseClick);
+    adForm.addEventListener(`submit`, submitHandler);
   };
 
   window.map = {

@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  const onEscPress = window.main.onEscPress;
+  const onEscPress = window.util.onEscPress;
 
   const ZERO_COORDINATES = {
     X: 0,
@@ -159,6 +159,7 @@
       deactivatePin();
       cardElement.remove();
       document.removeEventListener(`keydown`, onCardEscPress);
+      cardCrossClose.addEventListener(`click`, onCardCrossClickClose);
     };
 
     const onCardCrossClickClose = function () {
