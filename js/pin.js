@@ -1,8 +1,9 @@
 'use strict';
 
 (function () {
-  const housingType = window.filter.housingType;
-  const filterOrders = window.filter.filterOrders;
+  const setDebounce = window.debounce.setDebounce;
+  const mapFilter = window.filter.mapFilter;
+  const filterAllOptions = window.filter.filterAllOptions;
   const createCard = window.card.createCard;
   const deactivatePin = window.card.deactivatePin;
   const removeCards = window.card.removeCards;
@@ -78,9 +79,8 @@
     }
   };
 
-
-  const changeHousingTypeHandler = function () {
-    const filteredOrders = filterOrders(orders);
+  const changeFilterHandler = function () {
+    const filteredOrders = filterAllOptions(orders);
     removeCards();
     removePins();
     renderPins(filteredOrders);
@@ -89,7 +89,8 @@
   const successLoadHandler = function (data) {
     orders = data;
     renderPins(orders);
-    housingType.addEventListener(`change`, changeHousingTypeHandler);
+    mapFilter.addEventListener(`change`, setDebounce(changeFilterHandler));
+
   };
 
   window.pin = {

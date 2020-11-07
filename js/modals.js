@@ -28,8 +28,8 @@
 
   const closeMessageSuccess = function () {
     main.querySelector(`.success`).remove();
-    document.removeEventListener(`click`, closeMessageSuccess);
     document.removeEventListener(`keydown`, onEscCloseMessageSucc);
+    document.removeEventListener(`click`, closeMessageSuccess);
   };
 
   const onEscCloseMessageSucc = function (evt) {
