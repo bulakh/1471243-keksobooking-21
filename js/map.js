@@ -2,14 +2,26 @@
 
 const userMap = window.pin.userMap;
 const PIN_SIZE = window.pin.PIN_SIZE;
+const removePins = window.pin.removePins;
+
 const load = window.backend.load;
 const save = window.backend.save;
-const removePins = window.pin.removePins;
+
 const showErrorSend = window.modals.showErrorSend;
 const errorLoadHandler = window.modals.errorLoadHandler;
 const showSuccessSend = window.modals.showSuccessSend;
-const mainPin = document.querySelector(`.map__pin--main`);
+
 const mapFilter = window.filter.mapFilter;
+
+const resetPreviewInputs = window.upload.resetPreviewInputs;
+const activatePreviewInputs = window.upload.activatePreviewInputs;
+const adForm = window.upload.adForm;
+
+const mainPin = document.querySelector(`.map__pin--main`);
+const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
+const mapFiltresForm = document.querySelector(`.map__filters`);
+const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
+const adFormAddress = adForm.querySelector(`#address`);
 
 const START_COORDINATES = {
   X: 570,
@@ -30,12 +42,6 @@ const DefaultCoordinates = {
   X: TipCoordinates.X + HALF_PIN_SIZE.X,
   Y: TipCoordinates.Y + HALF_PIN_SIZE.Y
 };
-
-const adForm = document.querySelector(`.ad-form`);
-const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
-const mapFiltresForm = document.querySelector(`.map__filters`);
-const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
-const adFormAddress = adForm.querySelector(`#address`);
 
 const setAddress = function (x, y) {
   adFormAddress.value = x + `, ` + y;
@@ -104,6 +110,7 @@ const deactivatePage = function () {
   mainPin.addEventListener(`keydown`, onPinEnterPress);
   mainPin.addEventListener(`mousedown`, onPinMouseClick);
   adForm.removeEventListener(`submit`, submitHandler);
+  resetPreviewInputs();
 };
 
 deactivatePage();
@@ -120,6 +127,7 @@ const activatePage = function () {
   mainPin.removeEventListener(`keydown`, onPinEnterPress);
   mainPin.removeEventListener(`mousedown`, onPinMouseClick);
   adForm.addEventListener(`submit`, submitHandler);
+  activatePreviewInputs();
 };
 
 window.map = {

@@ -10,6 +10,7 @@ module.exports = {
     "./js/card.js",
     "./js/pin.js",
     "./js/modals.js",
+    "./js/upload.js",
     "./js/map.js",
     "./js/move.js",
     "./js/form.js"
