@@ -1,6 +1,6 @@
 'use strict';
 
-const onEscPress = window.util.onEscPress;
+const escPressHandler = window.util.escPressHandler;
 
 const ZERO_COORDINATES = {
   X: 0,
@@ -150,24 +150,24 @@ const createCard = function (advert) {
 
   mapFilterContainer.insertAdjacentElement(`beforebegin`, cardElement);
 
-  const onCardEscPress = function (evt) {
-    onEscPress(evt, closeCard);
+  const cardEscPressHandler = function (evt) {
+    escPressHandler(evt, closeCard);
   };
 
   const closeCard = function () {
     deactivatePin();
     cardElement.remove();
-    document.removeEventListener(`keydown`, onCardEscPress);
-    cardCrossClose.addEventListener(`click`, onCardCrossClickClose);
+    document.removeEventListener(`keydown`, cardEscPressHandler);
+    cardCrossClose.removeEventListener(`click`, cardCrossClickCloseHandler);
   };
 
-  const onCardCrossClickClose = function () {
+  const cardCrossClickCloseHandler = function () {
     closeCard();
   };
 
   const cardCrossClose = document.querySelector(`.popup__close`);
-  cardCrossClose.addEventListener(`click`, onCardCrossClickClose);
-  document.addEventListener(`keydown`, onCardEscPress);
+  cardCrossClose.addEventListener(`click`, cardCrossClickCloseHandler);
+  document.addEventListener(`keydown`, cardEscPressHandler);
 
   return cardElement;
 };

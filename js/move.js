@@ -1,15 +1,26 @@
 'use strict';
 
 const PIN_SIZE = window.pin.PIN_SIZE;
-const mainPin = window.map.mainPin;
-const setAddress = window.map.setAddress;
-const HALF_PIN_SIZE = window.map.HALF_PIN_SIZE;
+
+const adForm = window.upload.adForm;
+
+const mainPin = document.querySelector(`.map__pin--main`);
+const adFormAddress = adForm.querySelector(`#address`);
+
+const HALF_PIN_SIZE = {
+  X: PIN_SIZE.WIDTH / 2,
+  Y: PIN_SIZE.HEIGHT / 2
+};
 
 const LIMIT = {
   TOP: 130,
   BOTTOM: 630,
   LEFT: -32,
   RIGHT: 1168
+};
+
+const setAddress = function (x, y) {
+  adFormAddress.value = x + `, ` + y;
 };
 
 const setActualAddress = function () {
@@ -19,7 +30,7 @@ const setActualAddress = function () {
   setAddress(changedX, changedY);
 };
 
-const onMainPinMoveIt = function (evt) {
+const mainPinMoveItHandler = function (evt) {
   evt.preventDefault();
   let startCoords = {
     x: evt.clientX,
@@ -28,7 +39,7 @@ const onMainPinMoveIt = function (evt) {
 
   let dragged = false;
 
-  const onMouseMove = function (moveEvt) {
+  const mouseMoveHandler = function (moveEvt) {
     moveEvt.preventDefault();
 
     dragged = true;
@@ -57,23 +68,39 @@ const onMainPinMoveIt = function (evt) {
     setActualAddress();
   };
 
-  const onMouseUp = function (upEvt) {
+  const mouseUpHandler = function (upEvt) {
     upEvt.preventDefault();
 
-    document.removeEventListener(`mousemove`, onMouseMove);
-    document.removeEventListener(`mouseup`, onMouseUp);
+    document.removeEventListener(`mousemove`, mouseMoveHandler);
+    document.removeEventListener(`mouseup`, mouseUpHandler);
 
     if (dragged) {
-      const onClickPreventDefault = function (clickEvt) {
+      const clickPreventDefaultHandler = function (clickEvt) {
         clickEvt.preventDefault();
-        mainPin.removeEventListener(`click`, onClickPreventDefault);
+        mainPin.removeEventListener(`click`, clickPreventDefaultHandler);
       };
-      mainPin.addEventListener(`click`, onClickPreventDefault);
+      mainPin.addEventListener(`click`, clickPreventDefaultHandler);
     }
   };
 
-  document.addEventListener(`mousemove`, onMouseMove);
-  document.addEventListener(`mouseup`, onMouseUp);
+  document.addEventListener(`mousemove`, mouseMoveHandler);
+  document.addEventListener(`mouseup`, mouseUpHandler);
 };
 
-mainPin.addEventListener(`mousedown`, onMainPinMoveIt);
+const activateMovePin = function () {
+  mainPin.addEventListener(`mousedown`, mainPinMoveItHandler);
+};
+
+const deactivateMovePin = function () {
+  mainPin.removeEventListener(`mousedown`, mainPinMoveItHandler);
+};
+
+window.move = {
+  mainPin,
+  HALF_PIN_SIZE,
+  setAddress,
+  activateMovePin,
+  deactivateMovePin
+};
+
+

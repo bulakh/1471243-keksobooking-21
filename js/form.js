@@ -1,12 +1,21 @@
 'use strict';
 
-const adForm = window.map.adForm;
 const HouseType = window.card.HouseType;
+
+const adForm = window.upload.adForm;
+
 const MinHousePrice = {
   BUNGALOW: 0,
   FLAT: 1000,
   HOUSE: 5000,
   PALACE: 10000
+};
+
+const GuestsAndRooms = {
+  ONE: `1`,
+  TWO: `2`,
+  THREE: `3`,
+  NO_GUESTS: `0`
 };
 
 const roomNumber = adForm.querySelector(`#room_number`);
@@ -16,24 +25,24 @@ const priceNumber = adForm.querySelector(`#price`);
 const timeIn = adForm.querySelector(`#timein`);
 const timeOut = adForm.querySelector(`#timeout`);
 
-const joinGuestsToRooms = function () {
-  if (roomNumber.value === `1`) {
-    capacityNumber.value = 1;
+const guestsToRoomsJoinHandler = function () {
+  if (roomNumber.value === GuestsAndRooms.ONE) {
+    capacityNumber.value = parseInt(GuestsAndRooms.ONE, 10);
     capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
-  } else if (roomNumber.value === `2`) {
-    capacityNumber.value = 2;
+  } else if (roomNumber.value === GuestsAndRooms.TWO) {
+    capacityNumber.value = parseInt(GuestsAndRooms.TWO, 10);
     capacityNumber.options[0].setAttribute(`disabled`, `disabled`);
     capacityNumber.options[3].setAttribute(`disabled`, `disabled`);
     capacityNumber.options[2].removeAttribute(`disabled`, `disabled`);
     capacityNumber.options[1].removeAttribute(`disabled`, `disabled`);
-  } else if (roomNumber.value === `3`) {
-    capacityNumber.value = 3;
+  } else if (roomNumber.value === GuestsAndRooms.THREE) {
+    capacityNumber.value = parseInt(GuestsAndRooms.THREE, 10);
     capacityNumber.options[3].setAttribute(`disabled`, `disabled`);
     capacityNumber.options[1].removeAttribute(`disabled`, `disabled`);
     capacityNumber.options[2].removeAttribute(`disabled`, `disabled`);
     capacityNumber.options[0].removeAttribute(`disabled`, `disabled`);
   } else {
-    capacityNumber.value = 0;
+    capacityNumber.value = parseInt(GuestsAndRooms.NO_GUESTS, 10);
     capacityNumber.options[0].setAttribute(`disabled`, `disabled`);
     capacityNumber.options[2].setAttribute(`disabled`, `disabled`);
     capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
@@ -41,9 +50,7 @@ const joinGuestsToRooms = function () {
   }
 };
 
-roomNumber.addEventListener(`change`, joinGuestsToRooms);
-
-const changeTypeHouse = function () {
+const typeHouseChangeHandler = function () {
   if (typeHouse.value === HouseType.BUNGALOW) {
     priceNumber.min = MinHousePrice.BUNGALOW;
     priceNumber.placeholder = MinHousePrice.BUNGALOW;
@@ -59,16 +66,37 @@ const changeTypeHouse = function () {
   }
 };
 
-typeHouse.addEventListener(`change`, changeTypeHouse);
-
-const syncTimeOut = function () {
+const timeOutSyncHandler = function () {
   timeOut.value = timeIn.value;
 };
 
-const syncTimeIn = function () {
+const timeInSyncHandler = function () {
   timeIn.value = timeOut.value;
 };
 
-timeIn.addEventListener(`change`, syncTimeOut);
-timeOut.addEventListener(`change`, syncTimeIn);
+const resetCapacity = function () {
+  capacityNumber.options[0].setAttribute(`disabled`, `disabled`);
+  capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
+};
+
+const activateValidation = function () {
+  roomNumber.addEventListener(`change`, guestsToRoomsJoinHandler);
+  typeHouse.addEventListener(`change`, typeHouseChangeHandler);
+  timeIn.addEventListener(`change`, timeOutSyncHandler);
+  timeOut.addEventListener(`change`, timeInSyncHandler);
+};
+
+const deactivateValidation = function () {
+  roomNumber.removeEventListener(`change`, guestsToRoomsJoinHandler);
+  typeHouse.removeEventListener(`change`, typeHouseChangeHandler);
+  timeIn.removeEventListener(`change`, timeOutSyncHandler);
+  timeOut.removeEventListener(`change`, timeInSyncHandler);
+  resetCapacity();
+  adForm.reset();
+};
+
+window.form = {
+  activateValidation,
+  deactivateValidation
+};
 

@@ -1,6 +1,7 @@
 'use strict';
 
-const onEscPress = window.util.onEscPress;
+const escPressHandler = window.util.escPressHandler;
+
 const main = document.querySelector(`main`);
 const successMessageTemplate = document.querySelector(`#success`).content;
 const errorMessageTemplate = document.querySelector(`#error`).content;
@@ -19,37 +20,36 @@ const errorLoadHandler = function (errorMessage) {
 
 const showSuccessSend = function () {
   const message = successMessageTemplate.cloneNode(true);
-  message.querySelector(`.success`).addEventListener(`click`, closeMessageSuccess);
-  document.addEventListener(`keydown`, onEscCloseMessageSucc);
+  message.querySelector(`.success`).addEventListener(`click`, successMessageCloseHandler);
+  document.addEventListener(`keydown`, escCloseSuccessMessageHandler);
   main.appendChild(message);
 };
 
-const closeMessageSuccess = function () {
+const successMessageCloseHandler = function () {
   main.querySelector(`.success`).remove();
-  document.removeEventListener(`keydown`, onEscCloseMessageSucc);
-  document.removeEventListener(`click`, closeMessageSuccess);
+  document.removeEventListener(`keydown`, escCloseSuccessMessageHandler);
+  document.removeEventListener(`click`, successMessageCloseHandler);
 };
 
-const onEscCloseMessageSucc = function (evt) {
-  onEscPress(evt, closeMessageSuccess);
+const escCloseSuccessMessageHandler = function (evt) {
+  escPressHandler(evt, successMessageCloseHandler);
 };
 
 const showErrorSend = function () {
   const message = errorMessageTemplate.cloneNode(true);
-  message.querySelector(`.error__button`).addEventListener(`click`, closeMessageError);
-  message.querySelector(`.error`).addEventListener(`click`, closeMessageError);
-  document.addEventListener(`keydown`, onEscCloseMessageErr);
+  message.querySelector(`.error`).addEventListener(`click`, errorMessageCloseHandler);
+  document.addEventListener(`keydown`, escCloseErrorMessageHandler);
   main.appendChild(message);
 };
 
-const closeMessageError = function () {
+const errorMessageCloseHandler = function () {
   main.querySelector(`.error`).remove();
-  document.removeEventListener(`keydown`, onEscCloseMessageErr);
-  document.removeEventListener(`click`, closeMessageError);
+  document.removeEventListener(`keydown`, escCloseErrorMessageHandler);
+  document.removeEventListener(`click`, errorMessageCloseHandler);
 };
 
-const onEscCloseMessageErr = function (evt) {
-  onEscPress(evt, closeMessageError);
+const escCloseErrorMessageHandler = function (evt) {
+  escPressHandler(evt, errorMessageCloseHandler);
 };
 
 

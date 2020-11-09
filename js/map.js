@@ -1,27 +1,42 @@
 'use strict';
 
-const userMap = window.pin.userMap;
-const PIN_SIZE = window.pin.PIN_SIZE;
-const removePins = window.pin.removePins;
+const enterPressHandler = window.util.enterPressHandler;
+const mouseClickHandler = window.util.mouseClickHandler;
 
 const load = window.backend.load;
 const save = window.backend.save;
 
-const showErrorSend = window.modals.showErrorSend;
-const errorLoadHandler = window.modals.errorLoadHandler;
-const showSuccessSend = window.modals.showSuccessSend;
-
 const mapFilter = window.filter.mapFilter;
+
+const removeCards = window.card.removeCards;
+
+const userMap = window.pin.userMap;
+const removePins = window.pin.removePins;
+const activatePins = window.pin.activatePins;
+const deactivatePins = window.pin.deactivatePins;
+
+const showErrorSend = window.modals.showErrorSend;
+const showSuccessSend = window.modals.showSuccessSend;
+const errorLoadHandler = window.modals.errorLoadHandler;
+
 
 const resetPreviewInputs = window.upload.resetPreviewInputs;
 const activatePreviewInputs = window.upload.activatePreviewInputs;
 const adForm = window.upload.adForm;
 
-const mainPin = document.querySelector(`.map__pin--main`);
+const mainPin = window.move.mainPin;
+const HALF_PIN_SIZE = window.move.HALF_PIN_SIZE;
+const setAddress = window.move.setAddress;
+const activateMovePin = window.move.activateMovePin;
+const deactivateMovePin = window.move.deactivateMovePin;
+
+const activateValidation = window.form.activateValidation;
+const deactivateValidation = window.form.deactivateValidation;
+
 const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
 const mapFiltresForm = document.querySelector(`.map__filters`);
 const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
-const adFormAddress = adForm.querySelector(`#address`);
+const resetButton = adForm.querySelector(`.ad-form__reset`);
 
 const START_COORDINATES = {
   X: 570,
@@ -33,18 +48,9 @@ const TipCoordinates = {
   Y: parseInt(mainPin.style.top, 10)
 };
 
-const HALF_PIN_SIZE = {
-  X: PIN_SIZE.WIDTH / 2,
-  Y: PIN_SIZE.HEIGHT / 2
-};
-
 const DefaultCoordinates = {
   X: TipCoordinates.X + HALF_PIN_SIZE.X,
   Y: TipCoordinates.Y + HALF_PIN_SIZE.Y
-};
-
-const setAddress = function (x, y) {
-  adFormAddress.value = x + `, ` + y;
 };
 
 const setStartCoordsMainPin = function () {
@@ -69,12 +75,12 @@ const removeDisabledFromCollection = function (elements) {
   }
 };
 
-const onPinEnterPress = function (evt) {
-  window.util.onElemEnterPress(evt, activatePage);
+const pinEnterPressActivatePageHandler = function (evt) {
+  enterPressHandler(evt, activatePage);
 };
 
-const onPinMouseClick = function (evt) {
-  window.util.onElemMouseClick(evt, activatePage);
+const pinMouseClickActivatePageHandler = function (evt) {
+  mouseClickHandler(evt, activatePage);
 };
 
 const showFormWithLoad = function (data) {
@@ -104,13 +110,17 @@ const deactivatePage = function () {
   adForm.classList.add(`ad-form--disabled`);
   setStartCoordsMainPin();
   removePins();
+  removeCards();
   disableAllElements();
-  adForm.reset();
   mapFilter.reset();
-  mainPin.addEventListener(`keydown`, onPinEnterPress);
-  mainPin.addEventListener(`mousedown`, onPinMouseClick);
+  mainPin.addEventListener(`keydown`, pinEnterPressActivatePageHandler);
+  mainPin.addEventListener(`mousedown`, pinMouseClickActivatePageHandler);
   adForm.removeEventListener(`submit`, submitHandler);
+  deactivatePins();
+  deactivateMovePin();
+  deactivateValidation();
   resetPreviewInputs();
+  resetButton.removeEventListener(`click`, deactivatePage);
 };
 
 deactivatePage();
@@ -124,15 +134,12 @@ const activatePage = function () {
     window.pin.successLoadHandler(orders);
     showFormWithLoad(orders);
   }, errorLoadHandler);
-  mainPin.removeEventListener(`keydown`, onPinEnterPress);
-  mainPin.removeEventListener(`mousedown`, onPinMouseClick);
+  mainPin.removeEventListener(`keydown`, pinEnterPressActivatePageHandler);
+  mainPin.removeEventListener(`mousedown`, pinMouseClickActivatePageHandler);
   adForm.addEventListener(`submit`, submitHandler);
+  activatePins();
   activatePreviewInputs();
-};
-
-window.map = {
-  adForm,
-  mainPin,
-  HALF_PIN_SIZE,
-  setAddress
+  activateMovePin();
+  activateValidation();
+  resetButton.addEventListener(`click`, deactivatePage);
 };

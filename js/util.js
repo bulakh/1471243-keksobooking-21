@@ -27,19 +27,19 @@ const getRandomArrLength = function (arr) {
   return resultArr;
 };
 
-const onElemEnterPress = function (evt, action) {
+const enterPressHandler = function (evt, action) {
   if (evt.key === ENTER) {
     action();
   }
 };
 
-const onElemMouseClick = function (evt, action) {
+const mouseClickHandler = function (evt, action) {
   if (evt.which === LEFT_BUTTON_MOUSE) {
     action();
   }
 };
 
-const onEscPress = function (evt, action) {
+const escPressHandler = function (evt, action) {
   if (evt.key === ESC) {
     evt.preventDefault();
     action();
@@ -50,8 +50,8 @@ window.util = {
   getRandomArrElement,
   getRandomNumber,
   getRandomArrLength,
-  onElemEnterPress,
-  onElemMouseClick,
-  onEscPress
+  enterPressHandler,
+  mouseClickHandler,
+  escPressHandler
 };
 

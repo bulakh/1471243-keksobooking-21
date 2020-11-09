@@ -1,11 +1,13 @@
 'use strict';
 
 const setDebounce = window.debounce.setDebounce;
-const mapFilter = window.filter.mapFilter;
-const filterAllOptions = window.filter.filterAllOptions;
+
 const createCard = window.card.createCard;
 const deactivatePin = window.card.deactivatePin;
 const removeCards = window.card.removeCards;
+
+const mapFilter = window.filter.mapFilter;
+const filterAllOptions = window.filter.filterAllOptions;
 
 const PIN_SIZE = {
   WIDTH: 50,
@@ -37,7 +39,7 @@ const createPin = function (advert) {
 
 let orders = [];
 
-const onPinClickHandler = function (evt) {
+const pinOpenCardHandler = function (evt) {
   let pin;
   if (evt.target.matches(`.map__pin:not(.map__pin--active):not(.map__pin--main)`)) {
     pin = evt.target;
@@ -57,9 +59,6 @@ const onPinClickHandler = function (evt) {
     return false;
   }));
 };
-
-mapContainer.addEventListener(`click`, onPinClickHandler);
-
 
 const renderPins = function (currentOrders) {
   const pinFragment = document.createDocumentFragment();
@@ -89,12 +88,22 @@ const successLoadHandler = function (data) {
   orders = data;
   renderPins(orders);
   mapFilter.addEventListener(`change`, setDebounce(changeFilterHandler));
+};
 
+const activatePins = function () {
+  mapContainer.addEventListener(`click`, pinOpenCardHandler);
+};
+
+const deactivatePins = function () {
+  mapContainer.removeEventListener(`click`, pinOpenCardHandler);
+  mapFilter.removeEventListener(`change`, setDebounce(changeFilterHandler));
 };
 
 window.pin = {
   PIN_SIZE,
   userMap,
+  removePins,
   successLoadHandler,
-  removePins
+  activatePins,
+  deactivatePins
 };

@@ -91,6 +91,5 @@ const filterAllOptions = function (orders) {
 
 window.filter = {
   filterAllOptions,
-  mapFilter,
-  housingRooms
+  mapFilter
 };

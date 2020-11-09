@@ -59,6 +59,5 @@ window.backend = {
 
     xhr.open(`POST`, URL_SAVE);
     xhr.send(data);
-
   }
 };

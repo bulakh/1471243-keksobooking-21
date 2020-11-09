@@ -32,22 +32,22 @@ const showPreview = function (input, preview) {
   }
 };
 
-const showAvatar = function () {
+const avatarShowHandler = function () {
   showPreview(inputAvatar, previewAvatar);
 };
 
-const showPhoto = function () {
+const photoShowHandler = function () {
   showPreview(inputPhoto, previewPhoto);
 };
 
 const activatePreviewInputs = function () {
-  inputPhoto.addEventListener(`change`, showPhoto);
-  inputAvatar.addEventListener(`change`, showAvatar);
+  inputPhoto.addEventListener(`change`, photoShowHandler);
+  inputAvatar.addEventListener(`change`, avatarShowHandler);
 };
 
 const resetPreviewInputs = function () {
-  inputPhoto.removeEventListener(`change`, showPhoto);
-  inputAvatar.removeEventListener(`change`, showAvatar);
+  inputPhoto.removeEventListener(`change`, photoShowHandler);
+  inputAvatar.removeEventListener(`change`, avatarShowHandler);
   previewAvatar.src = `img/muffin-grey.svg`;
   previewPhoto.src = `#`;
   previewPhoto.classList.add(`hidden`);

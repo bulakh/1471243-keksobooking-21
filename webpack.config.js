@@ -11,9 +11,9 @@ module.exports = {
     "./js/pin.js",
     "./js/modals.js",
     "./js/upload.js",
-    "./js/map.js",
     "./js/move.js",
-    "./js/form.js"
+    "./js/form.js",
+    "./js/map.js"
   ],
   output: {
     filename: "bundle.js",
