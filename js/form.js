@@ -1,9 +1,5 @@
 'use strict';
 
-const HouseType = window.card.HouseType;
-
-const adForm = window.upload.adForm;
-
 const MinHousePrice = {
   BUNGALOW: 0,
   FLAT: 1000,
@@ -18,6 +14,10 @@ const GuestsAndRooms = {
   NO_GUESTS: `0`
 };
 
+const HouseType = window.card.HouseType;
+
+const adForm = window.upload.adForm;
+
 const roomNumber = adForm.querySelector(`#room_number`);
 const capacityNumber = adForm.querySelector(`#capacity`);
 const typeHouse = adForm.querySelector(`#type`);
@@ -25,7 +25,7 @@ const priceNumber = adForm.querySelector(`#price`);
 const timeIn = adForm.querySelector(`#timein`);
 const timeOut = adForm.querySelector(`#timeout`);
 
-const guestsToRoomsJoinHandler = function () {
+const guestsToRoomsJoinHandler = () => {
   if (roomNumber.value === GuestsAndRooms.ONE) {
     capacityNumber.value = parseInt(GuestsAndRooms.ONE, 10);
     capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
@@ -50,7 +50,7 @@ const guestsToRoomsJoinHandler = function () {
   }
 };
 
-const typeHouseChangeHandler = function () {
+const typeHouseChangeHandler = () => {
   if (typeHouse.value === HouseType.BUNGALOW) {
     priceNumber.min = MinHousePrice.BUNGALOW;
     priceNumber.placeholder = MinHousePrice.BUNGALOW;
@@ -66,32 +66,37 @@ const typeHouseChangeHandler = function () {
   }
 };
 
-const timeOutSyncHandler = function () {
+const timeOutSyncHandler = () => {
   timeOut.value = timeIn.value;
 };
 
-const timeInSyncHandler = function () {
+const timeInSyncHandler = () => {
   timeIn.value = timeOut.value;
 };
 
-const resetCapacity = function () {
+const resetCapacity = () => {
   capacityNumber.options[0].setAttribute(`disabled`, `disabled`);
   capacityNumber.options[1].setAttribute(`disabled`, `disabled`);
 };
 
-const activateValidation = function () {
+const resetPrice = () => {
+  priceNumber.placeholder = MinHousePrice.FLAT;
+};
+
+const activateValidation = () => {
   roomNumber.addEventListener(`change`, guestsToRoomsJoinHandler);
   typeHouse.addEventListener(`change`, typeHouseChangeHandler);
   timeIn.addEventListener(`change`, timeOutSyncHandler);
   timeOut.addEventListener(`change`, timeInSyncHandler);
 };
 
-const deactivateValidation = function () {
+const deactivateValidation = () => {
   roomNumber.removeEventListener(`change`, guestsToRoomsJoinHandler);
   typeHouse.removeEventListener(`change`, typeHouseChangeHandler);
   timeIn.removeEventListener(`change`, timeOutSyncHandler);
   timeOut.removeEventListener(`change`, timeInSyncHandler);
   resetCapacity();
+  resetPrice();
   adForm.reset();
 };
 

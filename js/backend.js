@@ -1,19 +1,19 @@
 'use strict';
 
-const URL_DATA = `https://21.javascript.pages.academy/keksobooking/data`;
-const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;
-
 const StatusCode = {
   OK: 200
 };
 const TIMEOUT_IN_MS = 10000;
+
+const URL_DATA = `https://21.javascript.pages.academy/keksobooking/data`;
+const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;
 
 window.backend = {
   load(onLoad, onError) {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
+    xhr.addEventListener(`load`, () => {
       if (xhr.status === StatusCode.OK) {
         onLoad(xhr.response);
       } else {
@@ -21,11 +21,11 @@ window.backend = {
       }
     });
 
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Произошла ошибка соединения`);
     })
     ;
-    xhr.addEventListener(`timeout`, function () {
+    xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за ` + xhr.timeout + ` мс`);
     });
 
@@ -40,7 +40,7 @@ window.backend = {
     const xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
+    xhr.addEventListener(`load`, () => {
       if (xhr.status === StatusCode.OK) {
         onLoad(xhr.response);
       } else {
@@ -48,10 +48,10 @@ window.backend = {
       }
     });
 
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Произошла ошибка соединения`);
     });
-    xhr.addEventListener(`timeout`, function () {
+    xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за ` + xhr.timeout + ` мс`);
     });
 

@@ -9,18 +9,18 @@ const previewAvatar = adForm.querySelector(`.ad-form-header__avatar`);
 const inputPhoto = adForm.querySelector(`.ad-form__input`);
 const previewPhoto = adForm.querySelector(`.ad-form__photo-preview`);
 
-const showPreview = function (input, preview) {
+const showPreview = (input, preview) => {
   const file = input.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matches = FILE_TYPES.some(function (it) {
+  const matches = FILE_TYPES.some((it) => {
     return fileName.endsWith(it);
   });
 
   if (matches) {
     const reader = new FileReader();
 
-    reader.addEventListener(`load`, function () {
+    reader.addEventListener(`load`, () => {
       preview.src = reader.result;
 
       if (preview.matches(`.hidden`)) {
@@ -32,20 +32,20 @@ const showPreview = function (input, preview) {
   }
 };
 
-const avatarShowHandler = function () {
+const avatarShowHandler = () => {
   showPreview(inputAvatar, previewAvatar);
 };
 
-const photoShowHandler = function () {
+const photoShowHandler = () => {
   showPreview(inputPhoto, previewPhoto);
 };
 
-const activatePreviewInputs = function () {
+const activatePreviewInputs = () => {
   inputPhoto.addEventListener(`change`, photoShowHandler);
   inputAvatar.addEventListener(`change`, avatarShowHandler);
 };
 
-const resetPreviewInputs = function () {
+const resetPreviewInputs = () => {
   inputPhoto.removeEventListener(`change`, photoShowHandler);
   inputAvatar.removeEventListener(`change`, avatarShowHandler);
   previewAvatar.src = `img/muffin-grey.svg`;

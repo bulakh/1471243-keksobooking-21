@@ -6,7 +6,7 @@ const mouseClickHandler = window.util.mouseClickHandler;
 const load = window.backend.load;
 const save = window.backend.save;
 
-const mapFilter = window.filter.mapFilter;
+const mapFilter = window.filter.map;
 
 const removeCards = window.card.removeCards;
 
@@ -25,10 +25,8 @@ const activatePreviewInputs = window.upload.activatePreviewInputs;
 const adForm = window.upload.adForm;
 
 const mainPin = window.move.mainPin;
-const HALF_PIN_SIZE = window.move.HALF_PIN_SIZE;
-const setAddress = window.move.setAddress;
-const activateMovePin = window.move.activateMovePin;
-const deactivateMovePin = window.move.deactivateMovePin;
+const activateMovePin = window.move.activatePin;
+const deactivateMovePin = window.move.deactivatePin;
 
 const activateValidation = window.form.activateValidation;
 const deactivateValidation = window.form.deactivateValidation;
@@ -38,77 +36,56 @@ const mapFiltresForm = document.querySelector(`.map__filters`);
 const mapFiltres = mapFiltresForm.querySelectorAll(`.map__filter`);
 const resetButton = adForm.querySelector(`.ad-form__reset`);
 
-const START_COORDINATES = {
-  X: 570,
-  Y: 375
-};
-
-const TipCoordinates = {
-  X: parseInt(mainPin.style.left, 10),
-  Y: parseInt(mainPin.style.top, 10)
-};
-
-const DefaultCoordinates = {
-  X: TipCoordinates.X + HALF_PIN_SIZE.X,
-  Y: TipCoordinates.Y + HALF_PIN_SIZE.Y
-};
-
-const setStartCoordsMainPin = function () {
-  mainPin.style.left = START_COORDINATES.X + `px`;
-  mainPin.style.top = START_COORDINATES.Y + `px`;
-};
-
-const disableEachElement = function (elements) {
+const disableEachElement = (elements) => {
   for (let elem of elements) {
     elem.setAttribute(`disabled`, `disabled`);
   }
 };
 
-const disableAllElements = function () {
+const disableAllElements = () => {
   disableEachElement(adFormFieldsets);
   disableEachElement(mapFiltres);
 };
 
-const removeDisabledFromCollection = function (elements) {
+const removeDisabledFromCollection = (elements) => {
   for (let elem of elements) {
     elem.removeAttribute(`disabled`, `disabled`);
   }
 };
 
-const pinEnterPressActivatePageHandler = function (evt) {
+const pinEnterPressActivatePageHandler = (evt) => {
   enterPressHandler(evt, activatePage);
 };
 
-const pinMouseClickActivatePageHandler = function (evt) {
+const pinMouseClickActivatePageHandler = (evt) => {
   mouseClickHandler(evt, activatePage);
 };
 
-const showFormWithLoad = function (data) {
+const showFormWithLoad = (data) => {
   if (data.length) {
     removeDisabledFromCollection(mapFiltres);
     mapFiltresForm.classList.remove(`hidden`);
   }
 };
 
-const successSendHandler = function () {
+const successSendHandler = () => {
   showSuccessSend();
-  deactivatePage();
+  pageDeactivateHandler();
 };
 
-const errorSendHandler = function () {
+const errorSendHandler = () => {
   showErrorSend();
-  deactivatePage();
+  pageDeactivateHandler();
 };
 
-const submitHandler = function (evt) {
+const submitHandler = (evt) => {
   save(new FormData(adForm), successSendHandler, errorSendHandler);
   evt.preventDefault();
 };
 
-const deactivatePage = function () {
+const pageDeactivateHandler = () => {
   userMap.classList.add(`map--faded`);
   adForm.classList.add(`ad-form--disabled`);
-  setStartCoordsMainPin();
   removePins();
   removeCards();
   disableAllElements();
@@ -120,17 +97,16 @@ const deactivatePage = function () {
   deactivateMovePin();
   deactivateValidation();
   resetPreviewInputs();
-  resetButton.removeEventListener(`click`, deactivatePage);
+  resetButton.removeEventListener(`click`, pageDeactivateHandler);
 };
 
-deactivatePage();
+pageDeactivateHandler();
 
-const activatePage = function () {
+const activatePage = () => {
   userMap.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
   removeDisabledFromCollection(adFormFieldsets);
-  setAddress(DefaultCoordinates.X, DefaultCoordinates.Y);
-  load(function (orders) {
+  load((orders) => {
     window.pin.successLoadHandler(orders);
     showFormWithLoad(orders);
   }, errorLoadHandler);
@@ -141,5 +117,5 @@ const activatePage = function () {
   activatePreviewInputs();
   activateMovePin();
   activateValidation();
-  resetButton.addEventListener(`click`, deactivatePage);
+  resetButton.addEventListener(`click`, pageDeactivateHandler);
 };

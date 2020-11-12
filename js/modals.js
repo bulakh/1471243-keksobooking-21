@@ -6,7 +6,7 @@ const main = document.querySelector(`main`);
 const successMessageTemplate = document.querySelector(`#success`).content;
 const errorMessageTemplate = document.querySelector(`#error`).content;
 
-const errorLoadHandler = function (errorMessage) {
+const errorLoadHandler = (errorMessage) => {
   const node = document.createElement(`div`);
   node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white`;
   node.style.position = `absolute`;
@@ -18,37 +18,37 @@ const errorLoadHandler = function (errorMessage) {
   document.body.insertAdjacentElement(`afterbegin`, node);
 };
 
-const showSuccessSend = function () {
+const showSuccessSend = () => {
   const message = successMessageTemplate.cloneNode(true);
   message.querySelector(`.success`).addEventListener(`click`, successMessageCloseHandler);
   document.addEventListener(`keydown`, escCloseSuccessMessageHandler);
   main.appendChild(message);
 };
 
-const successMessageCloseHandler = function () {
+const successMessageCloseHandler = () => {
   main.querySelector(`.success`).remove();
   document.removeEventListener(`keydown`, escCloseSuccessMessageHandler);
   document.removeEventListener(`click`, successMessageCloseHandler);
 };
 
-const escCloseSuccessMessageHandler = function (evt) {
+const escCloseSuccessMessageHandler = (evt) => {
   escPressHandler(evt, successMessageCloseHandler);
 };
 
-const showErrorSend = function () {
+const showErrorSend = () => {
   const message = errorMessageTemplate.cloneNode(true);
   message.querySelector(`.error`).addEventListener(`click`, errorMessageCloseHandler);
   document.addEventListener(`keydown`, escCloseErrorMessageHandler);
   main.appendChild(message);
 };
 
-const errorMessageCloseHandler = function () {
+const errorMessageCloseHandler = () => {
   main.querySelector(`.error`).remove();
   document.removeEventListener(`keydown`, escCloseErrorMessageHandler);
   document.removeEventListener(`click`, errorMessageCloseHandler);
 };
 
-const escCloseErrorMessageHandler = function (evt) {
+const escCloseErrorMessageHandler = (evt) => {
   escPressHandler(evt, errorMessageCloseHandler);
 };
 

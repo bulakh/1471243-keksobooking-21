@@ -1,16 +1,9 @@
 'use strict';
 
-const escPressHandler = window.util.escPressHandler;
-
-const ZERO_COORDINATES = {
+const ZeroCoordinates = {
   X: 0,
   Y: 0
 };
-
-const cardTemplate = document.querySelector(`#card`)
-  .content
-  .querySelector(`.map__card`);
-const mapFilterContainer = document.querySelector(`.map__filters-container`);
 
 const HouseType = {
   FLAT: `flat`,
@@ -26,50 +19,53 @@ const HouseTypeTitle = {
   [HouseType.PALACE]: `Дворец`
 };
 
-const makeFeatures = function (features, cardCloneFeatures) {
+const escPressHandler = window.util.escPressHandler;
+
+const cardTemplate = document.querySelector(`#card`)
+  .content
+  .querySelector(`.map__card`);
+const mapFilterContainer = document.querySelector(`.map__filters-container`);
+
+const makeFeatures = (features, cardCloneFeatures) => {
   const featuresFragment = document.createDocumentFragment();
   cardCloneFeatures.innerHTML = ``;
 
-  for (let i = 0; i < features.length; i++) {
-    const feature = document.createElement(`li`);
-    const featureClass = `popup__feature`;
-    const featureClassSpecial = `${featureClass}--${features[i]}`;
-
-    feature.textContent = features[i];
-    feature.classList.add(featureClass, featureClassSpecial);
-
-    featuresFragment.appendChild(feature);
-  }
-
+  features.forEach((feature) => {
+    const featuresElement = document.createElement(`li`);
+    const featuresElementClass = `popup__feature`;
+    const featuresElementClassSpecial = `${featuresElementClass}--${feature}`;
+    featuresElement.textContent = feature;
+    featuresElement.classList.add(featuresElementClass, featuresElementClassSpecial);
+    featuresFragment.appendChild(featuresElement);
+  });
   cardCloneFeatures.appendChild(featuresFragment);
 };
 
-const makePhotos = function (photos, cardClonePhotos) {
+const makePhotos = (photos, cardClonePhotos) => {
   const photoFragment = document.createDocumentFragment();
   cardClonePhotos.innerHTML = ``;
 
-  for (let i = 0; i < photos.length; i++) {
-    const photo = document.createElement(`img`);
-    const photoClass = `popup__photo`;
-    photo.alt = `Фотография жилья`;
-    photo.src = photos[i];
-    photo.style.width = 45;
-    photo.style.height = 40;
-    photo.classList.add(photoClass);
-
-    photoFragment.appendChild(photo);
-  }
+  photos.forEach((photo) => {
+    const picture = document.createElement(`img`);
+    const pictureClass = `popup__photo`;
+    picture.alt = `Фотография жилья`;
+    picture.src = photo;
+    picture.style.width = 45;
+    picture.style.height = 40;
+    picture.classList.add(pictureClass);
+    photoFragment.appendChild(picture);
+  });
   cardClonePhotos.appendChild(photoFragment);
 };
 
-const deactivatePin = function () {
+const deactivatePin = () => {
   const mapActivePin = document.querySelector(`.map__pin--active`);
   if (mapActivePin) {
     mapActivePin.classList.remove(`map__pin--active`);
   }
 };
 
-const createCard = function (advert) {
+const create = (advert) => {
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardTitle = cardElement.querySelector(`.popup__title`);
@@ -145,23 +141,23 @@ const createCard = function (advert) {
   if (advert.location.x && advert.location.y) {
     cardElement.style = `left: ` + advert.location.x + `px; top: ` + advert.location.y + `px;`;
   } else {
-    cardElement.style = `left: ` + ZERO_COORDINATES.X + `px; top: ` + ZERO_COORDINATES.Y + `px;`;
+    cardElement.style = `left: ` + ZeroCoordinates.X + `px; top: ` + ZeroCoordinates.Y + `px;`;
   }
 
   mapFilterContainer.insertAdjacentElement(`beforebegin`, cardElement);
 
-  const cardEscPressHandler = function (evt) {
+  const cardEscPressHandler = (evt) => {
     escPressHandler(evt, closeCard);
   };
 
-  const closeCard = function () {
+  const closeCard = () => {
     deactivatePin();
     cardElement.remove();
     document.removeEventListener(`keydown`, cardEscPressHandler);
     cardCrossClose.removeEventListener(`click`, cardCrossClickCloseHandler);
   };
 
-  const cardCrossClickCloseHandler = function () {
+  const cardCrossClickCloseHandler = () => {
     closeCard();
   };
 
@@ -172,7 +168,7 @@ const createCard = function (advert) {
   return cardElement;
 };
 
-const removeCards = function () {
+const removeCards = () => {
   const popups = document.querySelectorAll(`.popup`);
   for (let popup of popups) {
     popup.remove();
@@ -181,7 +177,7 @@ const removeCards = function () {
 
 
 window.card = {
-  createCard,
+  create,
   deactivatePin,
   removeCards,
   HouseType

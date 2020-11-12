@@ -1,13 +1,6 @@
 'use strict';
 
-const mapFilter = document.querySelector(`.map__filters`);
-const housingType = mapFilter.querySelector(`#housing-type`);
-const housingPrice = mapFilter.querySelector(`#housing-price`);
-const housingRooms = mapFilter.querySelector(`#housing-rooms`);
-const housingGuests = mapFilter.querySelector(`#housing-guests`);
-const housingFeatures = mapFilter.querySelector(`#housing-features`);
-
-let defaultSelectHouses = `any`;
+const DEFAULT_SELECT_HOUSES = `any`;
 
 const HousePriceLimit = {
   MIN: 10000,
@@ -20,20 +13,26 @@ const HousePriceType = {
   HIGH: `high`
 };
 
-const filterTypes = function (orders) {
-  return orders.filter(function (order) {
-    if (housingType.value === defaultSelectHouses) {
+const map = document.querySelector(`.map__filters`);
+const housingType = map.querySelector(`#housing-type`);
+const housingPrice = map.querySelector(`#housing-price`);
+const housingRooms = map.querySelector(`#housing-rooms`);
+const housingGuests = map.querySelector(`#housing-guests`);
+const housingFeatures = map.querySelector(`#housing-features`);
+
+const filterTypes = (orders) => {
+  return orders.filter((order) => {
+    if (housingType.value === DEFAULT_SELECT_HOUSES) {
       return true;
-    } else {
-      return order.offer.type === housingType.value;
     }
+    return order.offer.type === housingType.value;
   });
 };
 
-const filterPrice = function (orders) {
-  return orders.filter(function (order) {
+const filterPrice = (orders) => {
+  return orders.filter((order) => {
     switch (housingPrice.value) {
-      case defaultSelectHouses:
+      case DEFAULT_SELECT_HOUSES:
         return true;
       case HousePriceType.LOW:
         return (order.offer.price < HousePriceLimit.MIN);
@@ -46,31 +45,29 @@ const filterPrice = function (orders) {
   });
 };
 
-const filterRooms = function (orders) {
-  return orders.filter(function (order) {
-    if (housingRooms.value === defaultSelectHouses) {
+const filterRooms = (orders) => {
+  return orders.filter((order) => {
+    if (housingRooms.value === DEFAULT_SELECT_HOUSES) {
       return true;
-    } else {
-      return order.offer.rooms === parseInt(housingRooms.value, 10);
     }
+    return order.offer.rooms === parseInt(housingRooms.value, 10);
   });
 };
 
-const filterGuests = function (orders) {
-  return orders.filter(function (order) {
-    if (housingGuests.value === defaultSelectHouses) {
+const filterGuests = (orders) => {
+  return orders.filter((order) => {
+    if (housingGuests.value === DEFAULT_SELECT_HOUSES) {
       return true;
-    } else {
-      return order.offer.guests === parseInt(housingGuests.value, 10);
     }
+    return order.offer.guests === parseInt(housingGuests.value, 10);
   });
 };
 
-const filterFeatures = function (orders) {
+const filterFeatures = (orders) => {
   const features = housingFeatures.querySelectorAll(`.map__checkbox`);
   for (let feature of features) {
     if (feature.checked) {
-      orders = orders.filter(function (order) {
+      orders = orders.filter((order) => {
         return order.offer.features.includes(feature.value);
       });
     }
@@ -78,7 +75,7 @@ const filterFeatures = function (orders) {
   return orders;
 };
 
-const filterAllOptions = function (orders) {
+const allOptions = (orders) => {
   orders = filterTypes(orders);
   orders = filterPrice(orders);
   orders = filterRooms(orders);
@@ -90,6 +87,6 @@ const filterAllOptions = function (orders) {
 
 
 window.filter = {
-  filterAllOptions,
-  mapFilter
+  allOptions,
+  map
 };

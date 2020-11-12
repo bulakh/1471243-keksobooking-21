@@ -1,36 +1,53 @@
 'use strict';
 
-const PIN_SIZE = window.pin.PIN_SIZE;
+const HEIGHT_PIN_TIP = 22;
+
+const StartCoordinates = {
+  X: 570,
+  Y: 375
+};
+
+const Limit = {
+  TOP: 75,
+  BOTTOM: 543,
+  LEFT: -32,
+  RIGHT: 1168
+};
+
+const PinSize = window.pin.Size;
 
 const adForm = window.upload.adForm;
 
 const mainPin = document.querySelector(`.map__pin--main`);
 const adFormAddress = adForm.querySelector(`#address`);
 
-const HALF_PIN_SIZE = {
-  X: PIN_SIZE.WIDTH / 2,
-  Y: PIN_SIZE.HEIGHT / 2
+const setStartCoordsMainPin = () => {
+  mainPin.style.left = StartCoordinates.X + `px`;
+  mainPin.style.top = StartCoordinates.Y + `px`;
 };
 
-const LIMIT = {
-  TOP: 130,
-  BOTTOM: 630,
-  LEFT: -32,
-  RIGHT: 1168
+const HalfPinSize = {
+  X: Math.floor(PinSize.WIDTH / 2),
+  Y: Math.floor(PinSize.HEIGHT / 2)
 };
 
-const setAddress = function (x, y) {
-  adFormAddress.value = x + `, ` + y;
+const DeactiveCoordinates = {
+  X: StartCoordinates.X + HalfPinSize.X,
+  Y: StartCoordinates.Y + HalfPinSize.Y
 };
 
-const setActualAddress = function () {
-  let changedX = parseInt(mainPin.style.left, 10) + PIN_SIZE.WIDTH / 2;
-  let changedY = parseInt(mainPin.style.top, 10) + PIN_SIZE.HEIGHT / 2;
-
-  setAddress(changedX, changedY);
+const setDeactivateCoordinates = () => {
+  adFormAddress.placeholder = DeactiveCoordinates.X + `, ` + DeactiveCoordinates.Y;
 };
 
-const mainPinMoveItHandler = function (evt) {
+const setActualAddress = () => {
+  let changedX = parseInt(mainPin.style.left, 10) + HalfPinSize.X;
+  let changedY = parseInt(mainPin.style.top, 10) + PinSize.HEIGHT + HEIGHT_PIN_TIP;
+
+  adFormAddress.value = changedX + `, ` + changedY;
+};
+
+const mainPinMoveItHandler = (evt) => {
   evt.preventDefault();
   let startCoords = {
     x: evt.clientX,
@@ -39,7 +56,7 @@ const mainPinMoveItHandler = function (evt) {
 
   let dragged = false;
 
-  const mouseMoveHandler = function (moveEvt) {
+  const mouseMoveHandler = (moveEvt) => {
     moveEvt.preventDefault();
 
     dragged = true;
@@ -59,23 +76,23 @@ const mainPinMoveItHandler = function (evt) {
       Y: mainPin.offsetTop - shift.y
     };
 
-    if (mainPinPosition.X >= LIMIT.LEFT && mainPinPosition.X <= LIMIT.RIGHT) {
+    if (mainPinPosition.X >= Limit.LEFT && mainPinPosition.X <= Limit.RIGHT) {
       mainPin.style.left = mainPinPosition.X + `px`;
     }
-    if (mainPinPosition.Y >= LIMIT.TOP - HALF_PIN_SIZE.Y && mainPinPosition.Y <= LIMIT.BOTTOM) {
+    if (mainPinPosition.Y >= Limit.TOP - HalfPinSize.Y && mainPinPosition.Y <= Limit.BOTTOM) {
       mainPin.style.top = mainPinPosition.Y + `px`;
     }
     setActualAddress();
   };
 
-  const mouseUpHandler = function (upEvt) {
+  const mouseUpHandler = (upEvt) => {
     upEvt.preventDefault();
 
     document.removeEventListener(`mousemove`, mouseMoveHandler);
     document.removeEventListener(`mouseup`, mouseUpHandler);
 
     if (dragged) {
-      const clickPreventDefaultHandler = function (clickEvt) {
+      const clickPreventDefaultHandler = (clickEvt) => {
         clickEvt.preventDefault();
         mainPin.removeEventListener(`click`, clickPreventDefaultHandler);
       };
@@ -87,20 +104,21 @@ const mainPinMoveItHandler = function (evt) {
   document.addEventListener(`mouseup`, mouseUpHandler);
 };
 
-const activateMovePin = function () {
+const activatePin = () => {
   mainPin.addEventListener(`mousedown`, mainPinMoveItHandler);
+  setActualAddress();
 };
 
-const deactivateMovePin = function () {
+const deactivatePin = () => {
+  setDeactivateCoordinates();
   mainPin.removeEventListener(`mousedown`, mainPinMoveItHandler);
+  setStartCoordsMainPin();
 };
 
 window.move = {
   mainPin,
-  HALF_PIN_SIZE,
-  setAddress,
-  activateMovePin,
-  deactivateMovePin
+  activatePin,
+  deactivatePin
 };
 
 

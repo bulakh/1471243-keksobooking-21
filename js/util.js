@@ -4,42 +4,19 @@ const ENTER = `Enter`;
 const ESC = `Escape`;
 const LEFT_BUTTON_MOUSE = 1;
 
-const getRandomArrElement = function (arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-};
-
-const getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-};
-
-const getRandomArrLength = function (arr) {
-  const arrLength = getRandomNumber(1, arr.length);
-  const arrCopy = [...arr];
-  const resultArr = [];
-  for (let i = 0; i < arrLength; i++) {
-    const arrElement = getRandomArrElement(arrCopy);
-    resultArr.push(arrElement);
-    const index = arrCopy.indexOf(arrElement);
-    if (index > -1) {
-      arrCopy.splice(index, 1);
-    }
-  }
-  return resultArr;
-};
-
-const enterPressHandler = function (evt, action) {
+const enterPressHandler = (evt, action) => {
   if (evt.key === ENTER) {
     action();
   }
 };
 
-const mouseClickHandler = function (evt, action) {
+const mouseClickHandler = (evt, action) => {
   if (evt.which === LEFT_BUTTON_MOUSE) {
     action();
   }
 };
 
-const escPressHandler = function (evt, action) {
+const escPressHandler = (evt, action) => {
   if (evt.key === ESC) {
     evt.preventDefault();
     action();
@@ -47,9 +24,6 @@ const escPressHandler = function (evt, action) {
 };
 
 window.util = {
-  getRandomArrElement,
-  getRandomNumber,
-  getRandomArrLength,
   enterPressHandler,
   mouseClickHandler,
   escPressHandler
