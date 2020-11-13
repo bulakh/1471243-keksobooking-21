@@ -1,12 +1,13 @@
 'use strict';
 
-const StatusCode = {
-  OK: 200
-};
 const TIMEOUT_IN_MS = 10000;
 
 const URL_DATA = `https://21.javascript.pages.academy/keksobooking/data`;
 const URL_SAVE = `https://21.javascript.pages.academy/keksobooking`;
+
+const StatusCode = {
+  OK: 200
+};
 
 window.backend = {
   load(onLoad, onError) {
